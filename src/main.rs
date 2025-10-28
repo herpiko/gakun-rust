@@ -170,6 +170,19 @@ impl Gakun {
         // Join lines with newlines, preserving structure
         Ok(lines.join("\n") + if lines.is_empty() { "" } else { "\n" })
     }
+
+    fn detach(&self) -> Result<()> {
+        // Read the current SSH config and remove gakun-managed section
+        let data = self.read_file_with_skip_section()?;
+
+        // Write back the cleaned config
+        fs::write(&self.ssh_config_path, data)
+            .context("Failed to write SSH config")?;
+
+        println!("Gakun section removed from {} ✓", self.ssh_config_path.display());
+
+        Ok(())
+    }
 }
 
 #[derive(Parser)]
@@ -203,6 +216,9 @@ enum Commands {
     },
     #[command(about = "List profiles")]
     Ls,
+    #[command(about = "Detach gakun - remove gakun-managed section from ~/.ssh/config")]
+    #[command(alias = "d")]
+    Detach,
 }
 
 fn main() -> Result<()> {
@@ -218,6 +234,9 @@ fn main() -> Result<()> {
         }
         Commands::Ls => {
             gakun.list()?;
+        }
+        Commands::Detach => {
+            gakun.detach()?;
         }
     }
 

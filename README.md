@@ -34,10 +34,11 @@ SSH key manager
 Usage: gakun <COMMAND>
 
 Commands:
-  add   Add host and key to a profile. Example: 'gakun add work gitlab.com ~/.ssh/id_rsa_work'
-  use   Use SSH key for certain host. Example: 'gakun use work -h gitlab.com'
-  ls    List profiles
-  help  Print this message or the help of the given subcommand(s)
+  add      Add host and key to a profile. Example: 'gakun add work gitlab.com ~/.ssh/id_rsa_work'
+  use      Use SSH key for certain host. Example: 'gakun use work -h gitlab.com'
+  ls       List profiles
+  detach   Detach gakun - remove gakun-managed section from ~/.ssh/config
+  help     Print this message or the help of the given subcommand(s)
 
 Options:
   -h, --help  Print help
@@ -70,6 +71,22 @@ View all configured profiles:
 ```bash
 gakun ls
 ```
+
+#### Detach gakun
+
+Remove the gakun-managed section from your `~/.ssh/config` file, returning it to manual management:
+
+```bash
+gakun detach
+```
+
+You can also use the short alias:
+
+```bash
+gakun d
+```
+
+This command will cleanly remove the gakun-managed section (the lines between `###### gakun begin` and `###### gakun end`) from your SSH config, leaving the rest of your configuration intact.
 
 ## How it works
 
